@@ -8,9 +8,7 @@ function App() {
   let [count, setCount] = useState(0)
 
   let addvalue=()=>{
-    if(count >= 20){
-      setCount(20)
-    }else{
+    if(count < 20){
       count=count + 1;
       setCount(count);
     }
@@ -18,9 +16,7 @@ function App() {
   }
   
   let removevalue=()=>{
-    if(count <= 0){
-      setCount(0)
-    }else{
+    if(count > 0){
       setCount(count-1);
     }
     
@@ -38,6 +34,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
         <div>
+
           <h2>counter : {count}</h2>
           <button onClick={addvalue}>add value</button>
           <br />
