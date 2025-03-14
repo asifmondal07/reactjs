@@ -14,7 +14,7 @@ function App() {
   return (
     <>
       
-     <Card userName="AsifMondal" age={25} /> 
+     <Card userName={myobg.userName} age={25} /> 
      <br />
      <Card userName='Soaif Mondal'/> 
       
