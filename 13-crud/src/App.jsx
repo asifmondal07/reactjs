@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { Header } from './component/index.js';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // Use navigate for redirection if needed
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  useEffect(() => {
+    
+    const token = localStorage.getItem('token');
+    
+    
+    if (token) {
+      
+      setLoading(false); // Finish loading after token check
+      navigate('/'); 
+    } else {
+      setLoading(false); // No token, just stop the loading
+      navigate('/login'); // Redirect to login if no token
+    }
+  }, []); 
+
+  return loading ? (
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+      <div className='w-full block'>
+        <Header />
+        <main>
+          {/* Here we can render a loading spinner or anything else you want */}
+          <div className="flex justify-center items-center min-h-screen">
+            <p>Loading...</p>
+          </div>
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+    </div>
+  ) : (
+    // After loading is complete, render the main content
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+      <div className='w-full block'>
+        <Header />
+        <main>
+          <Outlet />
+        </main>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
