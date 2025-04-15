@@ -5,7 +5,7 @@ import store from './store/store.js'
 import './index.css'
 import App from './App.jsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import {Home,Login,Signup} from './pages/index.js'
+import {Home,Login,Signup,AddBlog,Post} from './pages/index.js'
 
 
 const router=createBrowserRouter([
@@ -24,6 +24,14 @@ const router=createBrowserRouter([
       {
         path:'/signup',
         element:<Signup/>,
+      },
+      {
+        path:'/addpost',
+        element:<AddBlog/>,
+      },
+      {
+        path:'/post/:id',
+        element:<Post/>,
       }
     ]
   }

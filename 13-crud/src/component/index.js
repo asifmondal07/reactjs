@@ -5,6 +5,8 @@ import Buttons from "./Buttons";
 import Login from "./Login/Login";
 import Input from "./Input";
 import Signup from "./Singup/Signup";
+import Select from "./Select";
+import Form from "./Form/Form";
 
 
 
@@ -16,4 +18,6 @@ export {
     Login,
     Input,
     Signup,
+    Select,
+    Form,
 }

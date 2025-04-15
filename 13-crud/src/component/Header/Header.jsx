@@ -14,11 +14,12 @@ const dispatch = useDispatch()
 
   useEffect(() => {
     const token = localStorage.getItem(token1234)
-    console.log('token12',token)
+    const userData = JSON.parse(localStorage.getItem('userData')) // Get user data from local storage
+    // console.log('token12',token)
       if(token && !authStatus){
           dispatch(login({
             token:token,
-            userData:{name:'User'}
+            userData:userData
           }))
       }else if(!token && authStatus){
           dispatch(logout())

@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { useDispatch } from 'react-redux'
 import authService from '../../Api/auth'
 import { Link,useNavigate } from 'react-router-dom'
@@ -13,6 +13,13 @@ function Signup() {
     const navigate = useNavigate()
     const {register,handleSubmit} = useForm()
     const [error, setError] = useState("");
+    const token = localStorage.getItem(token1234)
+
+    useEffect(() => {
+    if(token){
+        navigate('/')
+    }
+    },[token])
 
     const handleSignup = async (data) => {
         setError("");
@@ -22,12 +29,19 @@ function Signup() {
             
         if (response && response.token) {
 
+            llocalStorage.setItem(JSON.stringify({
+                            id:response.id,
+                            name:response.name,
+                        }))
             localStorage.setItem(token1234, response.token);
-
+            
+            const userData = JSON.parse(localStorage.getItem('userData')) // Get user data from local storage
+            
             dispatch(Authlogin({
-                userData: { name: response.name }, 
-                token: response.token
+                            userData: userData, 
+                            token: response.token
             }));
+
             navigate('/');
         } else {
             setError("Invalid signup Details");

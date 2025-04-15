@@ -1,25 +1,69 @@
+
 export class Service {
 
-    async createPost(title, content, image) {
+    async createPost(data, token) {
+        // console.log("createPost called with:", { data, token });
         try {
             const formData = new FormData();
-            formData.append('title', title);
-            formData.append('content', content);
-            formData.append('image', image);
+            formData.append('title', data.title);
+            formData.append('content', data.content);
+            
 
-            const res = await fetch('http://localhost:8000/blog/create', {
+            if (data.image && data.image.length > 0) {
+                for (let i = 0; i < data.image.length; i++) {
+                    formData.append("coverImage", data.image[i]);
+                }
+            }
+            
+
+            const headers = {
+                'Accept': 'application/json',
+              };
+              if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+              
+              const res = await fetch('http://localhost:8000/blog/create', {
                 method: 'POST',
+                headers,
                 body: formData,
-            });
+              });
+              
+            console.log("RESPONSE:", res);
+            
             if (!res.ok) throw new Error('Failed to create post');
-            return await res.json();
+            const json = await res.json();
+
+            // console.log("JSON RESPONSE:", json);
+            return json;
+
         } catch (error) {
             console.log("createPost :: ", error);
             return null;
         }
     }
 
-    async getAllPost(page=1, limit = 5, sort = '') {
+    async getPostById(id,token) {
+        try {
+            const headers = {
+                'Accept': 'application/json',
+              };
+              if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            const res = await fetch(`http://localhost:8000/blog/${id}`, {
+                method: 'GET',
+                headers: headers,
+            });
+            if (!res.ok) throw new Error('Failed to fetch data');
+            return await res.json();
+        } catch (error) {
+            console.log("getPost :: ", error);
+            return null;
+        }
+    }
+
+    async getAllPost(page=1, limit = 10, sort = 'new') {
         const queryParams = new URLSearchParams({
             page,
             limit,
@@ -37,6 +81,26 @@ export class Service {
             return await res.json();
         } catch (error) {
             console.log("getPost :: ", error);
+            return null;
+        }
+    }
+
+    async deletePost(id,token) {
+        try {
+            const headers = {
+                'Accept': 'application/json',
+              };
+              if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            const res = await fetch(`http://localhost:8000/blog/${id}`, {
+                method: 'DELETE',
+                headers: headers,
+            });
+            if (!res.ok) throw new Error('Failed to delete post');
+            return await res.json();
+        } catch (error) {
+            console.log("deletePost :: ", error);
             return null;
         }
     }

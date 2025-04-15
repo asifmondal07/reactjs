@@ -34,10 +34,17 @@ export class Service{
         }
     }
 
-    async logout(){
+    async logout(token){
        try {
+        const headers = {
+            'Accept': 'application/json',
+          };
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
         const res=await fetch('http://localhost:8000/user/logout', {
             method: 'POST', // or 'GET' if that's how your API works
+            headers: headers,
           })
           return res.json()
        } catch (error) {

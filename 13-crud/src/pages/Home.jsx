@@ -2,10 +2,9 @@ import React,{useState,useEffect} from 'react'
 import {Container,PostCard} from '../component/index'
 import ApiService from '../Api/config'
 
-
 export default function Home() {
     const [data,setData] = useState('')
-
+    
     useEffect(() => {
         ApiService.getAllPost().then((res) => {
             setData(res?.blogs || []);
@@ -14,6 +13,7 @@ export default function Home() {
             console.log(err)
         })
     },[])
+    
 
   return (
     <div className='w-full py-8'>
@@ -22,7 +22,7 @@ export default function Home() {
         {Array.isArray(data) ? (
           data.map((item) => (
             <div key={item._id} className='p-2 w-1/4'>
-              <PostCard {...item} />
+              <PostCard {...item} blogId={item._id}/>
             </div>
           ))
         ) : (

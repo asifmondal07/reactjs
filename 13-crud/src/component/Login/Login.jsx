@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState,useEffect, use } from 'react'; 
 import {token1234} from '../../key/key.js'
 import { useDispatch } from 'react-redux'
 import authService from '../../Api/auth'
@@ -12,22 +12,36 @@ export default function Login() {
     const navigate = useNavigate()
     const {register,handleSubmit} = useForm()
     const [error, setError] = useState("");
-  
+    const token = localStorage.getItem(token1234)
 
+    useEffect(() => {
+    if(token){
+        navigate('/')
+    }
+    },[token])
     const handleLogin = async (data) => {
         setError("");
         try {
             const {email, password} = data
             const response = await authService.login(email, password);
-            
-        if (response && response.token) {
+        if (response) {
+
             // Store the token in localStorage to persist it across page reloads
-            console.log('response',response.token)
+            console.log('response : ',response)
+
+            localStorage.setItem("userData", JSON.stringify({
+                id: response.id,
+                name: response.name,
+            }));
             localStorage.setItem(token1234, response.token);
+
+            const userData = JSON.parse(localStorage.getItem('userData')) // Get user data from local storage
+
             dispatch(Authlogin({
-                userData: { name: response.name }, 
+                userData: userData, 
                 token: response.token
             }));
+
             navigate('/');
         } else {
             setError("Invalid login Details");

@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Header } from './component/index.js';
+import { token1234 } from './key/key.js';
+import { useDispatch } from 'react-redux';
+import { login } from './store/authSlice.js';
+
 
 function App() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); // Use navigate for redirection if needed
+  const dispatch = useDispatch(); // Use dispatch for Redux actions if needed
+    const token = localStorage.getItem(token1234);
+    const userData = JSON.parse(localStorage.getItem('userData')); // Get user data from local storage
 
   useEffect(() => {
     
-    const token = localStorage.getItem('token');
-    
-    
     if (token) {
-      
+      dispatch(login({
+        token: token,
+        userData: userData // Replace with actual user data if available
+      }));
+
       setLoading(false); // Finish loading after token check
-      navigate('/'); 
     } else {
       setLoading(false); // No token, just stop the loading
       navigate('/login'); // Redirect to login if no token
