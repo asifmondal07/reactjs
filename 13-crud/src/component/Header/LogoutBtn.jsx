@@ -11,6 +11,7 @@
           try {
               await authService.logout(token)
               localStorage.removeItem(token1234)
+              localStorage.removeItem('userData')
               dispatch(logout())
           } catch (error) {
               console.log("Logout error: ", error)

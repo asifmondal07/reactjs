@@ -29,8 +29,6 @@ function PostCard({ title, coverImage, content,author,blogId }) {
             </div>
             
             <p className='text-black-700 mt-3'>{content}</p>
-            <p className='text-gray-500 mt-3 text-sm'>by {author?.name || 'Unknown Author'}</p>
-
     </div>
 
     

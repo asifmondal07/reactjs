@@ -25,11 +25,13 @@ function Signup() {
         setError("");
         try {
             const {name,email, password} = data
+            console.log("SIGNUP DATA:",data)
             const response = await authService.signup(name,email, password);
+            console.log("SIGNUP RESPONSE:",response)
             
         if (response && response.token) {
 
-            llocalStorage.setItem(JSON.stringify({
+            localStorage.setItem('userData',JSON.stringify({
                             id:response.id,
                             name:response.name,
                         }))
@@ -44,11 +46,13 @@ function Signup() {
 
             navigate('/');
         } else {
-            setError("Invalid signup Details");
-        }
+            setError("Invalid signup details");
+        }   
             
         } catch (error) {
-            setError(error.response?.data?.message || "Signup failed");
+            console.error("Signup Error:", error);
+            const errorMessage = error?.response?.data?.message || "Signup failed";
+            setError(errorMessage);
         }
     }
 
