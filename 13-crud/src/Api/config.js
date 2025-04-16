@@ -105,6 +105,77 @@ export class Service {
         }
     }
 
+    async editPost(id, data, token) {
+        
+            const formData = new FormData();
+            formData.append('title', data.title);
+            formData.append('content', data.content);
+
+            if (data.image && data.image.length > 0) {
+                for (let i = 0; i < data.image.length; i++) {
+                    formData.append("coverImage", data.image[i]);
+                }
+            }
+
+            const headers = {
+                'Accept': 'application/json',
+              };
+              if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+              
+              const res = await fetch(`http://localhost:8000/blog/${id}`, {
+                method: 'PATCH',
+                headers,
+                body: formData,
+              });
+              
+            console.log("RESPONSE:", res);
+            
+            if (!res.ok) return ('Failed to edit post : ',res.error);
+            const json = await res.json();
+
+            // console.log("JSON RESPONSE:", json);
+            return json;
+            
+        }
+        
+        
+        async deleteImage(id, token, index) {
+            const imageID = [index];
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // Add this
+            };
+        
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+        
+            const body = {
+                imageId: imageID
+            };
+        
+            console.log("DELETE IMAGE ID:", id);
+            console.log("DELETE IMAGE INDEX:", imageID);
+        
+            const res = await fetch(`http://localhost:8000/blog/${id}/image`, {
+                method: 'PATCH',
+                headers,
+                body: JSON.stringify(body) // Must be stringified
+            });
+        
+            if (!res.ok) {
+                console.error('Failed to delete file:', res.statusText);
+                return;
+            }
+        
+            const json = await res.json();
+            return json;
+        }
+        
+
+
 
 }
 

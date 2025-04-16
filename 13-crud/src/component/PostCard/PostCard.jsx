@@ -21,11 +21,15 @@ function PostCard({ title, coverImage, content,author,blogId }) {
          onClick={handleCardClick}> 
       <h2 className='text-xl font-bold'>{title}</h2>
             <div className='w-45 justify-center mb-4 mt-4'>
-            <img
-                src={imageUrl}
-                alt={title}
-                className='rounded-xl w-full h-48  object-cover'
+              {coverImage && coverImage.map((image, index) => (
+                <img
+                key={index}
+                src={`http://localhost:8000${image}`}
+                alt={`${title} - ${index + 1}`}
+                className='  px-4 py-6 rounded-4xl w-full h-48  object-cover'
             />
+              ))}
+            
             </div>
             
             <p className='text-black-700 mt-3'>{content}</p>

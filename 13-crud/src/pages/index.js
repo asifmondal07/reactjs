@@ -3,6 +3,7 @@ import Login from "./Login.jsx"
 import Signup from "./Signup.jsx"
 import AddBlog from "./AddBlog.jsx"
 import Post from "./Post.jsx"
+import EditBlog from "./EditBlog.jsx"
 
 export {
     Home,
@@ -10,5 +11,6 @@ export {
     Signup,
     AddBlog,
     Post,
+    EditBlog
 
 }

@@ -19,7 +19,6 @@ export default function Post() {
     const isAuthor = post && userData && post?.author?._id === userData.id
     
 
-
     useEffect(() => {
         if(!id || !token){
             navigate('/login')
@@ -31,7 +30,7 @@ export default function Post() {
         }).catch((err) => {
             console.log(err)
         })
-    },[id]) 
+    },[]) 
 
 
     const handleDelete=async()=>{
@@ -45,6 +44,22 @@ export default function Post() {
         }
         
     }
+    const handleFileDelete = async (index) => {
+        const confirm = window.confirm(`Are you sure you want to delete this image? ${index}`);
+        if (confirm) {
+            const res = await ApiService.deleteImage(id, token,index)
+            console.log("DELETE POST RESPONSE:", res)
+            if (res) {
+               setPost(prevPost => ({
+                     ...prevPost ,
+                    coverImage : res.coverImage
+                
+               }))
+            }
+        }
+    }
+    
+
     if (!post) {
         return (
           <div className="text-center py-10">
@@ -63,12 +78,17 @@ export default function Post() {
                     {Array.isArray(post?.coverImage) && post.coverImage.length > 0 && (
                             <div className="grid grid-cols-2 gap-4 mb-4 mt-4">
                                 {post.coverImage.map((img, index) => (
-                                <img
-                                    key={index}
-                                    src={`http://localhost:8000${img}`}
-                                    alt={`${post?.title} - ${index + 1}`}
-                                    className='rounded-xl w-full h-full object-cover'
-                                />
+                                <div key={index}>{
+                                    isAuthor &&(<button className='w-10 bg-red-700 text-2xl
+                                         text-amber-100 cursor-pointer' onClick={()=>{handleFileDelete(index)}}>X</button>) 
+                                    }<img
+                                
+                                src={`http://localhost:8000${img}`}
+                                alt={`${post?.title} - ${index + 1}`}
+                                className='rounded-xl w-500  h-100 mt-4 object-cover'
+                            /></div>
+                                
+                                
                                 ))}
                             </div>
                     )}
