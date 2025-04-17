@@ -145,7 +145,7 @@ export class Service {
             const imageID = [index];
             const headers = {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json', // Add this
+                'Content-Type': 'application/json', 
             };
         
             if (token) {

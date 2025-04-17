@@ -9,6 +9,8 @@ import {token1234} from '../../key/key.js'
 
 export default function Header() {
     const authStatus = useSelector((state) => state.auth?.status)
+    const userName= useSelector((state) => state.auth?.userData?.name)
+    const firstName=userName?.split(' ')[0]
 const navigate = useNavigate()
 const dispatch = useDispatch()
 
@@ -60,8 +62,9 @@ const dispatch = useDispatch()
               </button>
             ))}
             { authStatus && (
-              <Link
-                to='/'
+
+              <div>
+                <Link
                 className='text-lg text-red-500'
                 onClick={() => {
                   navigate('/')
@@ -69,6 +72,20 @@ const dispatch = useDispatch()
               >
                   <LogoutBtn />
               </Link>
+              <button 
+                key={firstName}
+                to='/profile'
+                className={`text-lg inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full ${firstName ? 'text-blue-500' : 'text-gray-700'}`}
+                // onClick={() => {
+                  
+                //     navigate('/profile')
+                // }}
+              >
+                {firstName}
+              </button>
+
+              </div>
+
             )}
           </nav>
         </div>
