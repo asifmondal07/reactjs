@@ -45,13 +45,11 @@ function Signup() {
             }));
 
             navigate('/');
-        } else {
-            setError("Invalid signup details");
-        }   
+        } 
             
         } catch (error) {
             console.error("Signup Error:", error);
-            const errorMessage = error?.response?.data?.message || "Signup failed";
+            const errorMessage = error?.message || "Signup failed";
             setError(errorMessage);
         }
     }

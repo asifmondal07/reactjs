@@ -3,11 +3,8 @@ import ApiService from '../../Api/config'
 import { useNavigate } from 'react-router-dom'
 
 
-function PostCard({ title, coverImage, content,author,blogId }) {
+function PostCard({ title, coverImage, content,blogId }) {
   const navigate = useNavigate()
-  const imageUrl = coverImage?.[0]
-    ? `http://localhost:8000${coverImage[0]}`
-    : coverImage?.[0] // fallback image
 
     const handleCardClick= async()=>{
       const res = await ApiService.getPostById(blogId)

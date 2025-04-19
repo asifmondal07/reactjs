@@ -19,6 +19,7 @@ export default function Login() {
         navigate('/')
     }
     },[token])
+
     const handleLogin = async (data) => {
         setError("");
         try {
@@ -43,12 +44,11 @@ export default function Login() {
             }));
 
             navigate('/');
-        } else {
-            setError("Invalid login Details");
         }
             
         } catch (error) {
-            setError(error.response?.data?.message || "Login failed");
+            console.log("Login error:", error);
+        setError(error.message || "Login failed");
         }
     }
   return (

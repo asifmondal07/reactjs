@@ -13,7 +13,7 @@ export class Service{
             const data= await res.json();
 
             if (!res.ok) {
-                // 🔥 Attach backend error message to the thrown error
+                
                 const error = new Error(data.message || 'Failed to signup');
                 error.response = { data }; // Simulate Axios-style error object
                 throw error;
@@ -23,7 +23,7 @@ export class Service{
             
         } catch (error) {
             console.log("signup :: ", error);
-            return null;
+            throw error;
         }
     }
 
@@ -36,11 +36,16 @@ export class Service{
                 },
                 body: JSON.stringify({ email, password }),
             });
-            if (!res.ok) throw new Error('Failed to login');
-            return await res.json();
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Failed to login');
+            }
+    
+            return data;
         } catch (error) {
             console.log("login :: ", error);
-            return null;
+            throw error;;
         }
     }
 

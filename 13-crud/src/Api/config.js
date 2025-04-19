@@ -63,14 +63,15 @@ export class Service {
         }
     }
 
-    async getAllPost(page=1, limit = 10, sort = 'new') {
+    async getAllPost(page, limit, sort) {
         const queryParams = new URLSearchParams({
-            page,
-            limit,
-        });
-        if (sort) queryParams.append('sort', sort);
+            page: String(page),
+            limit: String(limit),
+            sort: String(sort)
+          })
 
         const url = `http://localhost:8000/blog/?${queryParams.toString()}`;
+        
         console.log(url); // Log the constructed URL
 
         try {
