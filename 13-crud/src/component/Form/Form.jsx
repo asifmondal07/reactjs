@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import {Buttons,Input,Select} from '../index'
-import {set, useForm} from 'react-hook-form'
+import {useForm} from 'react-hook-form'
 import ApiService from '../../Api/config'
 import {token1234} from '../../key/key.js'
 
@@ -12,17 +12,17 @@ export default function Form({post}) {
 
   const {register,handleSubmit,getValues,control,reset, formState:{errors}} = useForm({
     defaultValues:{
-      title:post?.title || "",
-      content:post?.content || "",
-      image:post?.image || "",
-      status:post?.status || "active",
+      title:post?.blog.title || "",
+      content:post?.blog.content || "", 
+      image:[],
     }
   }) 
+  
   if(post){
-  console.log("POST DATA:",post)
+  console.log("POST DATA 1 :",post)
   
   }
-  const blog=post?.blog;
+  const blog=post?.blog;    
 
   const token = useSelector(state => state.auth?.token) || token1234
 
@@ -61,6 +61,7 @@ export default function Form({post}) {
             className="w-full"
             {...register("title", { required: "Title is required" })}
 
+
         />
         {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
 
@@ -72,6 +73,7 @@ export default function Form({post}) {
               placeholder="Enter the blog content"
               className="w-full"
               {...register("content", { required: "content is required" })}
+             
         />
         {errors.content && <p className="text-red-500 text-sm">{errors.content.message}</p>}
     </div>
@@ -101,17 +103,24 @@ export default function Form({post}) {
                       />
                     ))}
                   </div>
-                  <p className="text-gray-500 text-sm mt-1">Click to replace the image</p>
+                  
                 </div>
             )}
         </div>
-
-        <Select
-            label="Status"
-            options={["active", "inactive"]}
-            className="w-full"
-            {...register("status")}
-        />
+        {/* {!post && 
+          <div className="w-full  space-y-4">
+            <label className="block text-gray-700 font-medium mb-1">
+              Featured Images :
+            </label>
+            <Input
+                type="file"
+                multiple
+                accept="image/*"
+                className="block w-full text-sm border rounded-lg p-2 bg-gray-50"
+                {...register("image[]", { required: !post })}
+            />
+            </div>
+        } */}
 
         <Buttons type="submit" className="w-full" ButtonsText={post ? "Update Blog" : "Add Blog"}>
             

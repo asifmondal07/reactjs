@@ -108,6 +108,7 @@ export class Service {
 
     async editPost(id, data, token) {
         
+            try {
             const formData = new FormData();
             formData.append('title', data.title);
             formData.append('content', data.content);
@@ -130,14 +131,17 @@ export class Service {
                 headers,
                 body: formData,
               });
-              
-            console.log("RESPONSE:", res);
             
-            if (!res.ok) return ('Failed to edit post : ',res.error);
-            const json = await res.json();
+              const json = await res.json();
 
-            // console.log("JSON RESPONSE:", json);
-            return json;
+              if(!res.ok) throw new Error( json.message||'Failed to edit post');
+
+                return json;
+
+            } catch (error) {
+                console.log("edit post :: ", error);
+                throw error;;
+            }
             
         }
         

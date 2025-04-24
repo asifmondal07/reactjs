@@ -5,6 +5,7 @@ const Input = React.forwardRef(function Input({
     placeholder,
     type = 'text',
     className = '',
+    
     ...props
 }, ref) {
     const id = useId();
@@ -20,6 +21,7 @@ const Input = React.forwardRef(function Input({
                 placeholder={placeholder}
                 {...props}
                 id={id}
+               
             />
         </div>
     );
