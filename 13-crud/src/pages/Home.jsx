@@ -1,27 +1,37 @@
 import React,{useState,useEffect} from 'react'
 import {Container,PostCard} from '../component/index'
 import ApiService from '../Api/config'
+import { useSearchParams } from 'react-router-dom';
 
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [page, setPage] = useState(1);
-  const [sort, setSort] = useState('new'); // Default sort option
+
+  // Manage URL params
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page=Number(searchParams.get('page')) || 1; // Get page number from URL or default to 1
+
+  const sort = searchParams.get('sort') || 'new'; // Get sort parameter from URL or default to empty string
+
+
   const limit =4; // Number of items per page
   
-    console.log("sort : ",sort)
+  // console.log("sort : ",sort)
   useEffect(() => {
     ApiService.getAllPost(page,limit,sort).then((res) => {
-      console.log("RESPONSE : ",res)
+      // console.log("RESPONSE : ",res)
       setData(res?.blogs || []);
       setTotalPages(res.totalpages || {});
 
     }).catch((err) => {
       console.log(err);
     });
-  }, [page, sort, page, totalPages]);
+  }, [page, sort]);
 
+    //pagination logic
+  
   function getPaginationPages(current, total) {
     const pages = [];
     
@@ -51,11 +61,16 @@ export default function Home() {
   
   const pageNumbers = getPaginationPages(page, totalPages);
 
-
+  // Handle pagination click
+  const handlePageChange = (newPage) => {
+    setSearchParams({ page: newPage, sort: sort });
+}
   
   const handelSortChange = (e) => {
-    console.log("SORT : ", e.target.value);
-  setSort(e.target.value);
+
+      const newSort=(e.target.value);
+      console.log("SORT PARAM : ",newSort)
+      setSearchParams({ page: 1, sort: newSort });
   }
   
 
@@ -86,7 +101,7 @@ export default function Home() {
               {pageNumbers.map((num, idx) => (
                 <button
                   key={idx}
-                  onClick={() => typeof num === 'number' && setPage(num)}
+                  onClick={() => typeof num === 'number' && handlePageChange(num)}
                   disabled={num === '...'}
                   className={`px-4 py-2 rounded-md border ${
                     page === num ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'

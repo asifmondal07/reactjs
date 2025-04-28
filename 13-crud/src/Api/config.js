@@ -1,3 +1,4 @@
+import { token1234 } from "../key/key";
 
 export class Service {
 
@@ -28,14 +29,17 @@ export class Service {
                 headers,
                 body: formData,
               });
-              
-            console.log("RESPONSE:", res);
+            if (res.status === 403 || res.status === 401) {
+                localStorage.removeItem(token1234);
+                localStorage.removeItem('userData');
+                alert("Invalid token! Please log in again.");
+                window.location.href = '/login'; // 🔁 Redirect to login
+                throw new Error("Invalid token! Please log in again.");
+            }
             
-            if (!res.ok) throw new Error('Failed to create post');
-            const json = await res.json();
-
+            const result = await res.json();
             // console.log("JSON RESPONSE:", json);
-            return json;
+            return result;
 
         } catch (error) {
             console.log("createPost :: ", error);
@@ -98,10 +102,29 @@ export class Service {
                 method: 'DELETE',
                 headers: headers,
             });
-            if (!res.ok) throw new Error('Failed to delete post');
-            return await res.json();
+
+            if (res.status === 403 || res.status === 401) {
+                localStorage.removeItem(token1234);
+                localStorage.removeItem('userData');
+                alert("Invalid token! Please log in again.");
+                window.location.href = '/login'; // 🔁 Redirect to login
+                throw new Error("Invalid token! Please log in again.");
+            }
+            
+            const result= await res.json();
+
+            return result;
         } catch (error) {
             console.log("deletePost :: ", error);
+            
+            if("Invalid token! Please log in again."=== error.message){
+                localStorage.removeItem(token1234)
+                localStorage.removeItem('userData')
+                alert("Invalid token! Please log in again.");
+                window.location.href='/login'
+            }else{
+                alert(error.message || 'Something went wrong')
+            }
             return null;
         }
     }
@@ -132,51 +155,68 @@ export class Service {
                 body: formData,
               });
             
-              const json = await res.json();
+            if (res.status === 403 || res.status === 401) {
+                localStorage.removeItem(token1234);
+                localStorage.removeItem('userData');
+                alert("Invalid token! Please log in again.");
+                window.location.href = '/login'; // 🔁 Redirect to login
+                throw new Error("Invalid token! Please log in again.");
+            }
 
-              if(!res.ok) throw new Error( json.message||'Failed to edit post');
+              const json = await res.json();
 
                 return json;
 
             } catch (error) {
                 console.log("edit post :: ", error);
-                throw error;;
+                return null;
             }
             
         }
         
         
         async deleteImage(id, token, index) {
-            const imageID = [index];
-            const headers = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json', 
-            };
-        
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`;
+
+            try {
+                const imageID = [index];
+                const headers = {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json', 
+                };
+            
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+            
+                const body = {
+                    imageId: imageID
+                };
+            
+                console.log("DELETE IMAGE ID:", id);
+                console.log("DELETE IMAGE INDEX:", imageID);
+            
+                const res = await fetch(`http://localhost:8000/blog/${id}/image`, {
+                    method: 'PATCH',
+                    headers,
+                    body: JSON.stringify(body) // Must be stringified
+                });
+            
+                if (res.status === 403 || res.status === 401) {
+                    localStorage.removeItem(token1234);
+                    localStorage.removeItem('userData');
+                    alert("Invalid token! Please log in again.");
+                    window.location.href = '/login'; // 🔁 Redirect to login
+                    throw new Error("Invalid token! Please log in again.");
+                }
+            
+                const result = await res.json();
+                return result;
+                
+            } catch (error) {
+                console.log("deleteImage :: ", error.message);
+                return null;
+                
             }
-        
-            const body = {
-                imageId: imageID
-            };
-        
-            console.log("DELETE IMAGE ID:", id);
-            console.log("DELETE IMAGE INDEX:", imageID);
-        
-            const res = await fetch(`http://localhost:8000/blog/${id}/image`, {
-                method: 'PATCH',
-                headers,
-                body: JSON.stringify(body) // Must be stringified
-            });
-        
-            if (!res.ok) {
-                console.error('Failed to delete file:', res.statusText);
-                return;
-            }
-        
-            const json = await res.json();
-            return json;
         }
         
 

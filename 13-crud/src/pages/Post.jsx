@@ -48,7 +48,7 @@ export default function Post() {
         const confirm = window.confirm(`Are you sure you want to delete this image?`);
         if (confirm) {
             const res = await ApiService.deleteImage(id, token,index)
-            console.log("DELETE POST RESPONSE:", res)
+            console.log("DELETE IMAGE RESPONSE:", res)
             if (res) {
                setPost(prevPost => ({
                      ...prevPost ,

@@ -30,21 +30,27 @@ export default function Form({post}) {
     if(post){
       
       const res= await ApiService.editPost(blog._id,data,token)
-      if(res){
+      console.log("EDIT POST RESPONSE:",res)
+
+      if(res.message==='Blog editing successful'){
         alert("Blog Updated Successfully")
         navigate(`/post/${blog._id}`)
+      }else{
+        alert(res.message)
       }
-
 
     }else{
       const res= await ApiService.createPost(data,token)
-    if(res && res.Blog && res.Blog._id){
-      alert("Blog Created Successfully")
+      console.log("CREATE POST RESPONSE:",res)
+      
+      if(res && res.Blog && res.Blog._id){
+        alert("Blog Created Successfully")
 
-      navigate(`/post/${res.Blog._id}`)
-    }else {
-      alert("Failed to create blog :",res?.message || "Unknown error")
-    }
+        navigate(`/post/${res.Blog._id}`)
+      }else {
+        const message = res?.message || "Failed to create blog. Please try again.";
+        alert( message)
+      }
     }
   }
 
@@ -88,8 +94,9 @@ export default function Form({post}) {
                 multiple
                 accept="image/*"
                 className="block w-full text-sm border rounded-lg p-2 bg-gray-50"
-                {...register("image[]", { required: !post })}
+                {...register("image[]", { required: !post && "file is required"})}
             />
+            {errors.image && <p className="text-red-500 text-sm">{errors.image.message}</p>}
             {blog?.coverImage?.length > 0 && (
                 <div>
                   <label className="block text-gray-700 font-medium mb-1 mt-2">Current Images:</label>
