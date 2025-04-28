@@ -13,7 +13,7 @@ export default function Home() {
 
   const page=Number(searchParams.get('page')) || 1; // Get page number from URL or default to 1
 
-  const sort = searchParams.get('sort') || 'new'; // Get sort parameter from URL or default to empty string
+  const sort = searchParams.get('sort') || ''; // Get sort parameter from URL or default to empty string
 
 
   const limit =4; // Number of items per page
@@ -65,10 +65,12 @@ export default function Home() {
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage, sort: sort });
 }
+
+  var newSort="";
   
   const handelSortChange = (e) => {
 
-      const newSort=(e.target.value);
+      newSort=(e.target.value);
       console.log("SORT PARAM : ",newSort)
       setSearchParams({ page: 1, sort: newSort });
   }
@@ -113,12 +115,16 @@ export default function Home() {
 
               </div>
 
-              <div>
+              <div >
 
-                <select onChange={(e)=>handelSortChange(e)} className="border border-gray-300 rounded-md p-2 text-gray-700">
-                  <option value="">Select sort option</option>
-                  <option value="new">Newest First</option>
-                  <option value="old">Oldest First</option>
+                <select 
+                onChange={(e)=>handelSortChange(e)} className="bundle-dropdown border mt-7 
+                 border-gray-300 rounded-md p-2 text-gray-700"
+                 value={sort || "Default"} 
+                >
+                  <option value="Default">Select Sorting Option</option>
+                  <option value="Newest">Newest First</option>
+                  <option value="Oldest">Oldest First</option>
                 </select>
                 
               </div>
