@@ -37,6 +37,8 @@ export default function Form({post}) {
         navigate(`/post/${blog._id}`)
       }else{
         alert(res.message)
+        alert("Delete Image and upload again")
+         navigate(`/post/${blog._id}`)
       }
 
     }else{
