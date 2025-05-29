@@ -38,7 +38,7 @@ function App() {
       <div className="card">
         <button className="btn" onClick={() => inc()}>increment {count1}</button>
         <button className="btn" onClick={() => dec()}>decrement {count1}</button>
-        <button className="btn" onClick={() => rest()}>reset{count1}</button>
+        <button className="btn" onClick={() => rest()}>reset {count1}</button>
       </div>
       
     </>
