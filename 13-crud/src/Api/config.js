@@ -150,7 +150,7 @@ export class Service {
             }
               
               const res = await fetch(`http://localhost:8000/blog/${id}`, {
-                method: 'PATCH',
+                method: 'PUT',
                 headers,
                 body: formData,
               });
@@ -196,7 +196,7 @@ export class Service {
                 console.log("DELETE IMAGE INDEX:", imageID);
             
                 const res = await fetch(`http://localhost:8000/blog/${id}/image`, {
-                    method: 'PATCH',
+                    method: 'PUT',
                     headers,
                     body: JSON.stringify(body) // Must be stringified
                 });
